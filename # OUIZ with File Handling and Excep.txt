@@ -1,0 +1,90 @@
+# OUIZ with File Handling and Exception Handling
+print("----------------Online Test------------------\n\n")
+print("             Register as a user           ")
+
+try:
+    # Register the user and save their information to a file
+    name = input("Enter your name: ").lower()
+    password = input("Enter your password:").lower()
+    
+    with open("user_registration.txt", "w") as reg_file:
+        reg_file.write(f"Name: {name}\nPassword: {password}\n")
+    
+    print("\nUser registered successfully!\n")
+    
+    questions = (
+        "Which data structure can be used to implement function call recursion?",
+        "In a directed acyclic graph (DAG), which of the following algorithms is used to find the topological ordering of the vertices?",
+        "Which type of tree traversal visits the nodes in the order: root, left subtree, right subtree?",
+        "Which collision resolution technique in hashing uses a linked list to store multiple values at the same hash index?",
+        "Which of the following algorithms is used for finding the shortest path in an unweighted graph?"
+    )
+    options = (
+        ("A) Queue ", "B) Stack ", "C) Array ", "D) Heap"),
+        ("A) Kruskal's Algorithm", "B) Dijkstra's Algorithm", "C) Topological Sort ", "D) Floyd-Warshall Algorithm"),
+        ('A) In-order ', 'B) Post-order ', 'C) Pre-order', ' D) Level-order'),
+        ('A) Linear probing ', 'B) Quadratic probing', 'C) Separate chaining ', 'D) Double hashing'),
+        ("A) Dijkstra's Algorithm", "B) Depth-First Search (DFS)", "C) Breadth-First Search (BFS)", "D) Prim's Algorithm")
+    )
+    answers = ("B", "C", "C", "C", "C")
+    guesses = []
+    score = 0
+    question_num = 0
+
+
+
+
+    
+    
+    with open("quiz_results.txt", "w") as result_file:
+        for question in questions:
+            print("------------------------------------------------------")
+            print(question)
+            for option in options[question_num]:
+                print(option)
+            
+            guess = input("Enter (A, B, C, D): ").upper()
+            
+            if guess not in ("A", "B", "C", "D"):
+                raise ValueError("Invalid input! Please enter A, B, C, or D.")
+            
+            guesses.append(guess)
+            result_file.write(f"Q{question_num + 1}: {guess}\n")
+            
+            if guess == answers[question_num]:
+                score += 1
+                print("CORRECT")
+                result_file.write("Result: CORRECT\n")
+            else:
+                print("INCORRECT")
+                print(f"{answers[question_num]} is the CORRECT answer.")
+                result_file.write(f"Result: INCORRECT (Correct: {answers[question_num]})\n")
+            
+            question_num += 1
+        
+        print("--------------------------")
+        print("            RESULT        ")
+        print("--------------------------")
+        
+        print("Answers:", end=" ")
+        for answer in answers:
+            print(answer, end=" ")
+        print()
+        
+        print("Guesses:", end=" ")
+        for guess in guesses:
+            print(guess, end=" ")
+        print()
+        
+        score_percentage = round(score / len(questions) * 100)
+        print(f"Your score is: {score_percentage}%")
+        
+        result_file.write(f"\nFinal Score: {score_percentage}%\n")
+
+except FileNotFoundError as fnf_error:
+    print("Error: File not found or unable to write to file.")
+    print(fnf_error)
+except ValueError as ve:
+    print("Input Error:", ve)
+except Exception as e:
+    print("An unexpected error occurred:", e)
